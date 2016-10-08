@@ -21,15 +21,23 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      'total': 0,
-      'days': 0,
-      'hours': 0,
-      'minutes': 0,
-      'seconds': 0
+      'endTime': 0,
+      'time': {
+        'total': 0,
+        'days': 0,
+        'hours': 0,
+        'minutes': 0,
+        'seconds': 0
+      }
+      
     }
   }
 
   render() {
+
+     const { endTime, time } = this.state;
+    // console.log(endTime);
+
     return (
       <MuiThemeProvider>
         <div className="App">
@@ -39,6 +47,10 @@ class App extends Component {
           </div>
           <Button label="Pomo Me" onClick={startTimer} primary={true}/>
           <Button label="Reset" primary={false}/>
+          <div>
+            <div>{time.minutes}</div>
+            <div>{time.seconds}</div>
+          </div>
           <p className="App-intro">
             To get started, edit <code>src/App.js</code> and save to reload.
           </p>
