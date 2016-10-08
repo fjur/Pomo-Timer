@@ -4,7 +4,7 @@ import RaisedButton from 'material-ui/RaisedButton';
 
 const Button = (props) => {
 
-  console.log(props);
+  // console.log(props);
 
   // const style = {
   //   width: 100,
