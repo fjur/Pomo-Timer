@@ -3,9 +3,10 @@ import logo from './logo.svg';
 import './App.css';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
-//Button Component
+//Components
 import Button from './Components/Button.js';
 import TimeButton from './Components/TimeButton.js';
+import TimeDisplay from './Components/TimeDisplay.js';
 
 import Nofication from './Utils/Notification.js';
 
@@ -34,10 +35,13 @@ class App extends Component {
   }
 
   updateTime (timeInMinutes) {
+    var {intervalId} = this.state
+    clearInterval(intervalId);
     var time = this.getTime(timeInMinutes * 60 * 1000)
     this.setState({
       timeInMinutes: timeInMinutes,
-      time: time
+      time: time,
+      intervalId: null,
     });
   }
 
@@ -56,6 +60,11 @@ class App extends Component {
   startTimer() {
     //Calulcate the end time
     var timeInMinutes = this.state.timeInMinutes;
+
+    if (timeInMinutes === 0) {
+      return;
+    }
+
     var currentTime = Date.now();
     var endTime = new Date(currentTime + timeInMinutes*60*1000);
 
@@ -79,7 +88,9 @@ class App extends Component {
       time: remainingTime
     });
 
-    if (remainingTime.total <= 0) {
+    console.log(remainingTime);
+    if (remainingTime.seconds <= 0) {
+      Nofication();
       clearInterval(intervalId);
     }
   };
@@ -104,8 +115,6 @@ class App extends Component {
     };
   }
 
-  
-
   render() {
     const { time } = this.state;
  
@@ -116,17 +125,17 @@ class App extends Component {
             <img src={logo} className="App-logo" alt="logo" />
             <h2>Welcome to Pomodoro!</h2>
           </div>
-          <Button label="Pomo Me" onClick={this.startTimer} primary={true}/>
-          <Button label="Stop" onClick={this.stopTimer} primary={false}/>
+          <div>
+            <Button label="Pomo Me" onClick={this.startTimer} primary={true}/>
+            <Button label="Stop" onClick={this.stopTimer} primary={false}/>
+          </div>
           <TimeButton time={25} onClick={this.updateTime}/>
           <TimeButton time={50} onClick={this.updateTime}/>
-
           <div>
-            <div>Minutes: {time.minutes}</div>
-            <div>Seconds: {time.seconds}</div>
+            <TimeDisplay time={time.minutes} />
+            <TimeDisplay time={time.seconds} />
           </div>
           <p className="App-intro">
-            To get started, edit <code>src/App.js</code> and save to reload.
           </p>
         </div>
       </MuiThemeProvider >
