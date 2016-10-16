@@ -5,6 +5,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 //Button Component
 import Button from './Components/Button.js';
+import TimeButton from './Components/TimeButton.js';
+
 //Timer
 import Timer from './Utils/TimerCalculator.js';
 
@@ -21,6 +23,8 @@ class App extends Component {
 
     this.startTimer = this.startTimer.bind(this);
     this.updateClock = this.updateClock.bind(this);
+    this.updateTime = this.updateTime.bind(this);
+    this.getTime = this.getTime.bind(this);
 
     this.state = {
       intervalId: null,
@@ -37,74 +41,100 @@ class App extends Component {
     }
   }
 
-  updateClock () {
-    var { intervalId, endTime } = this.state;
-
+  updateTime (timeInMinutes) {
     // debugger;
+    // var time = this.getRemainingTime(timeInMinutes);
+    // console.log(time);
+    // var time = timeInMinutes * 60 * 1000;
+
+    var time = this.getTime(timeInMinutes * 60 * 1000)
+
+    this.setState({
+      timeInMinutes: timeInMinutes,
+      time: time
+    });
+  }
+
+  // DetermineEndTime() {
+  //    var timeInMinutes = this.state.timeInMinutes;
+  //     var currentTime = Date.now();
+  //     var endTime = new Date(currentTime + timeInMinutes*60*1000);
+  // }
+
+  startTimer() {
+
+    //Calulcate the end time
+    var timeInMinutes = this.state.timeInMinutes;
+    var currentTime = Date.now();
+    var endTime = new Date(currentTime + timeInMinutes*60*1000);
+
+    //Update the state
+    this.setState({endTime: endTime}) //This is useless, don't need to store...
+
+    this.updateClock(endTime); //Update the clock
+    var intervalId = setInterval(this.updateClock.bind(this, endTime), 1000);
+
+    this.setState({
+      intervalId: intervalId,
+    });
+
+    // console.log(this.state);
+
+  } 
+
+  updateClock (endTime) {
+    var { intervalId } = this.state;
 
     var remainingTime = this.getRemainingTime(endTime);
-    
-    console.log(intervalId);
-    console.log(endTime);
-    console.log(remainingTime);
-
-    if (remainingTime.total <= 0) {
-      clearInterval(intervalId);
-    }
 
     this.setState({
       time: remainingTime
     });
 
-    return remainingTime;
+    if (remainingTime.total <= 0) {
+      clearInterval(intervalId);
+    }
   };
 
   getRemainingTime (endTime) {
     var t = Date.parse(endTime) - Date.now();
-    var seconds = Math.floor(t / 1000 % 60);
-    var minutes = Math.floor(t / 1000 / 60 % 60);
-    var hours = Math.floor(t / 1000 / 60 / 60 % 24);
-    var days = Math.floor(t / 1000 / 60 / 60 / 24);
-    // debugger;
+
+    return this.getTime(t);
+
+    // var seconds = Math.floor(t / 1000 % 60);
+    // var minutes = Math.floor(t / 1000 / 60 % 60);
+    // var hours = Math.floor(t / 1000 / 60 / 60 % 24);
+    // var days = Math.floor(t / 1000 / 60 / 60 / 24);
+
+    // return {
+    //   total: t,
+    //   days: days,
+    //   hours: hours,
+    //   minutes: minutes,
+    //   seconds: seconds
+    // };
+  };
+
+  getTime(time) {
+    var seconds = Math.floor(time / 1000 % 60);
+    var minutes = Math.floor(time / 1000 / 60 % 60);
+    var hours = Math.floor(time / 1000 / 60 / 60 % 24);
+    var days = Math.floor(time / 1000 / 60 / 60 / 24);
+
     return {
-      total: t,
+      total: time,
       days: days,
       hours: hours,
       minutes: minutes,
       seconds: seconds
     };
-  };
+  }
 
-
-  startTimer() {
-
-    //Calulcate the end time
-    var timeInMinutes = 1;
-    var currentTime = Date.now();
-    var endTime = new Date(currentTime + timeInMinutes*60*1000);
-
-    //UPdate the state
-    this.setState({endTime: endTime})
-    console.log("STQATE");
-    console.log(this.state);
-    
-    var remainingTime = this.updateClock(); //Update the clock
-    var intervalId = setInterval(this.updateClock.bind(this), 1000);
-
-    this.setState({
-      intervalId: intervalId,
-      // time: remainingTime
-    });
-
-    console.log(this.state);
-
-  }   
+  
 
   render() {
-
     const { time } = this.state;
-    // console.log(endTime);
-    // console.log(this);
+ 
     return (
       <MuiThemeProvider>
         <div className="App">
@@ -114,9 +144,12 @@ class App extends Component {
           </div>
           <Button label="Pomo Me" onClick={this.startTimer} primary={true}/>
           <Button label="Reset" primary={false}/>
+          <TimeButton time={25} onClick={this.updateTime}/>
+          <TimeButton time={50} onClick={this.updateTime}/>
+
           <div>
-            <div>{time.minutes}</div>
-            <div>{time.seconds}</div>
+            <div>Minutes: {time.minutes}</div>
+            <div>Seconds: {time.seconds}</div>
           </div>
           <p className="App-intro">
             To get started, edit <code>src/App.js</code> and save to reload.
