@@ -7,9 +7,6 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Button from './Components/Button.js';
 import TimeButton from './Components/TimeButton.js';
 
-//Timer
-import Timer from './Utils/TimerCalculator.js';
-
 class App extends Component {
 
   constructor(props) {
