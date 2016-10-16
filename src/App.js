@@ -10,12 +10,6 @@ import TimeButton from './Components/TimeButton.js';
 //Timer
 import Timer from './Utils/TimerCalculator.js';
 
-// var timeInMinutes = .1;
-// var currentTime = Date.now();
-// var endTime = new Date(currentTime + timeInMinutes*60*1000);
-
-
-
 class App extends Component {
 
   constructor(props) {
@@ -37,16 +31,10 @@ class App extends Component {
         minutes: 0,
         seconds: 0
       }
-      
     }
   }
 
   updateTime (timeInMinutes) {
-    // debugger;
-    // var time = this.getRemainingTime(timeInMinutes);
-    // console.log(time);
-    // var time = timeInMinutes * 60 * 1000;
-
     var time = this.getTime(timeInMinutes * 60 * 1000)
     this.setState({
       timeInMinutes: timeInMinutes,
@@ -56,11 +44,8 @@ class App extends Component {
 
   stopTimer () {
     var { intervalId, time } = this.state;
-    // console.log(this.state);
-        console.log(timeInMinutes);
-    // debugger;
     var timeInMinutes = time.total / 60 / 1000;
-    // debugger;
+
     this.setState({
       intervalId: null,
       timeInMinutes: timeInMinutes
@@ -102,21 +87,7 @@ class App extends Component {
 
   getRemainingTime (endTime) {
     var t = Date.parse(endTime) - Date.now();
-
     return this.getTime(t);
-
-    // var seconds = Math.floor(t / 1000 % 60);
-    // var minutes = Math.floor(t / 1000 / 60 % 60);
-    // var hours = Math.floor(t / 1000 / 60 / 60 % 24);
-    // var days = Math.floor(t / 1000 / 60 / 60 / 24);
-
-    // return {
-    //   total: t,
-    //   days: days,
-    //   hours: hours,
-    //   minutes: minutes,
-    //   seconds: seconds
-    // };
   };
 
   getTime(time) {
