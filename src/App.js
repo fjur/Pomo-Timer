@@ -25,7 +25,7 @@ class App extends Component {
     this.updateClock = this.updateClock.bind(this);
     this.updateTime = this.updateTime.bind(this);
     this.getTime = this.getTime.bind(this);
-
+    this.stopTimer = this.stopTimer.bind(this);
     this.state = {
       intervalId: null,
       timeInMinutes: 0,
@@ -48,21 +48,28 @@ class App extends Component {
     // var time = timeInMinutes * 60 * 1000;
 
     var time = this.getTime(timeInMinutes * 60 * 1000)
-
     this.setState({
       timeInMinutes: timeInMinutes,
       time: time
     });
   }
 
-  // DetermineEndTime() {
-  //    var timeInMinutes = this.state.timeInMinutes;
-  //     var currentTime = Date.now();
-  //     var endTime = new Date(currentTime + timeInMinutes*60*1000);
-  // }
+  stopTimer () {
+    var { intervalId, time } = this.state;
+    // console.log(this.state);
+        console.log(timeInMinutes);
+    // debugger;
+    var timeInMinutes = time.total / 60 / 1000;
+    // debugger;
+    this.setState({
+      intervalId: null,
+      timeInMinutes: timeInMinutes
+    });
+    clearInterval(intervalId);
+  }
+
 
   startTimer() {
-
     //Calulcate the end time
     var timeInMinutes = this.state.timeInMinutes;
     var currentTime = Date.now();
@@ -77,9 +84,6 @@ class App extends Component {
     this.setState({
       intervalId: intervalId,
     });
-
-    // console.log(this.state);
-
   } 
 
   updateClock (endTime) {
@@ -143,7 +147,7 @@ class App extends Component {
             <h2>Welcome to Pomodoro!</h2>
           </div>
           <Button label="Pomo Me" onClick={this.startTimer} primary={true}/>
-          <Button label="Reset" primary={false}/>
+          <Button label="Stop" onClick={this.stopTimer} primary={false}/>
           <TimeButton time={25} onClick={this.updateTime}/>
           <TimeButton time={50} onClick={this.updateTime}/>
 
