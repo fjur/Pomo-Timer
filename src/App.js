@@ -7,6 +7,8 @@ import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import Button from './Components/Button.js';
 import TimeButton from './Components/TimeButton.js';
 
+import Nofication from './Utils/Notification.js';
+
 class App extends Component {
 
   constructor(props) {
