@@ -60,7 +60,7 @@ class App extends Component {
   startTimer() {
     //Calulcate the end time
     // var timeInMinutes = this.state.timeInMinutes;
-    var {timeInMinutes, intervalId} = this.state;
+    var { timeInMinutes, intervalId } = this.state;
 
     if (timeInMinutes === 0 || intervalId != null) {
       return;
@@ -89,8 +89,8 @@ class App extends Component {
       time: remainingTime
     });
 
-    console.log(remainingTime);
-    if (remainingTime.seconds <= 0) {
+    // console.log(remainingTime);
+    if (remainingTime.seconds <= 0 && remainingTime.minutes <= 0) {
       Nofication();
       clearInterval(intervalId);
     }
