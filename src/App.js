@@ -59,9 +59,10 @@ class App extends Component {
 
   startTimer() {
     //Calulcate the end time
-    var timeInMinutes = this.state.timeInMinutes;
+    // var timeInMinutes = this.state.timeInMinutes;
+    var {timeInMinutes, intervalId} = this.state;
 
-    if (timeInMinutes === 0) {
+    if (timeInMinutes === 0 || intervalId != null) {
       return;
     }
 
